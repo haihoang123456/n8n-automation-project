@@ -1,0 +1,168 @@
+{
+  "name": "My workflow 2",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1af6239c-d160-481f-a0ca-859b1a3073df",
+      "name": "Telegram Trigger",
+      "webhookId": "380ca6b4-55e3-431f-a2a3-803d066fc6ec",
+      "credentials": {
+        "telegramApi": {
+          "id": "irx7nFHsk2HxtKmY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "AgACAgUAAxkBAAMDaebX_uw-W2as0QIv38hUloVkkkIAAtsOaxtWCTlXdEhhsdqUuVABAAMCAANzAAM7BA",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "a971d411-874f-4f9a-95e8-cdf191b77b60",
+      "name": "Get a file",
+      "webhookId": "d0b6bde5-a06d-4c94-a980-aae9e1ccf95c",
+      "credentials": {
+        "telegramApi": {
+          "id": "irx7nFHsk2HxtKmY",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.remove.bg/v1.0/removebg",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "image_file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "size",
+              "value": "auto"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "6f505af4-f66b-46a7-8d43-b4eda8f5ea5d",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "1zuPXsHTmH4BofJg",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "={{ $node[\"Telegram Trigger\"].json[\"message\"][\"caption\"] }}.png",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1hntr5rLN6tw5DpFp4undSrAwFMhU7wro",
+          "mode": "list",
+          "cachedResultName": "anh cua hai",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1hntr5rLN6tw5DpFp4undSrAwFMhU7wro"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "c048e6dc-5c77-4bab-9e09-5e8cdf777011",
+      "name": "Upload file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "t7EE2bmoAI44d0ZQ",
+          "name": "Google Drive OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Upload file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fd40d0e3-57fa-4b34-b43a-5664b347822b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "46126ead4f0a30ec02c326d9ec6079d454b3c9fa241c5e13f5424f3deb894618"
+  },
+  "id": "guq7pYSmRtpgsEtE",
+  "tags": []
+}
